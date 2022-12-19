@@ -34,7 +34,7 @@ export async function execute(server, socket, request) {
     location_info
   );
 
-  console.log("new connection", username, locaiton_info, user_agent);
+  console.log("new connection", username, location_info, user_agent);
 
   await server.setEvents("client", socket);
 
