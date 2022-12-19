@@ -16,7 +16,11 @@ export default class Server extends WebSocketServer {
           JSON.stringify({
             type,
             content: message,
-            author: author.username,
+            author: {
+              agent: author.user_agent,
+              name: author.username,
+              location: author.locaiton_info,
+            },
             timestamp: Date.now(),
           })
         );

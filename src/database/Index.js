@@ -1,5 +1,8 @@
 import { WebSocketServer, WebSocket } from "ws";
 import { v4 as uuidv4 } from "uuid";
+import ua from "ua-parser-js";
+
+const { IResult } = ua;
 
 var sockets = [];
 
@@ -12,14 +15,17 @@ export default class Database {
 
   /**
    * @param {WebSocket} socket
-   * @param {username} string
+   * @param {string} username
+   * @param {IResult} user_agent
    */
-  add_client(socket, username) {
+  add_client(socket, username, user_agent, locaiton_info) {
     sockets = sockets.filter((s) => s.readyState == WebSocket.OPEN);
 
     const uuid = this.generate_uuid();
 
     socket.uuid = uuid;
+    socket.user_agent = user_agent;
+    author.locaiton_info = locaiton_info;
 
     if (sockets.find((s) => s.username == username))
       return { error: `This name "${username}" is taken` };

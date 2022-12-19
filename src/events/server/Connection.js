@@ -1,5 +1,8 @@
 "use strict";
 import { WebSocketServer, WebSocket } from "ws";
+import UAParser from "ua-parser-js";
+import IPLookup from "../../utils/IPLookup.js";
+import CountryFlag from "../../utils/CountryFlag.js";
 
 export const name = "connection";
 /**
@@ -12,9 +15,27 @@ export async function execute(server, socket, request) {
     new URLSearchParams(request.url).get("/?username") ||
     new URLSearchParams(request.url).get("/?name");
 
-  console.log("new connection", username);
+  const user_ip = await IPLookup(
+    request.headers["x-forwarded-for"] || request.socket.remoteAddress
+  );
+  const locaiton_info = {
+    countryCode: user_ip.countryCode,
+    region: user_ip.region,
+    country: {
+      name: user_ip.country,
+      code: user_ip.countryCode,
+      flag: CountryFlag(user_ip.countryCode),
+    },
+  };
+  const user_agent = new UAParser(request.headers["user-agent"]).getResult();
+  const user_created = server.database.add_client(
+    socket,
+    username,
+    user_agent,
+    locaiton_info
+  );
 
-  const user_created = server.database.add_client(socket, username);
+  console.log("new connection", username, locaiton_info, user_agent);
 
   await server.setEvents("client", socket);
 
