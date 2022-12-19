@@ -25,7 +25,7 @@ export default class Database {
 
     socket.uuid = uuid;
     socket.user_agent = user_agent;
-    author.locaiton_info = locaiton_info;
+    socket.locaiton_info = locaiton_info;
 
     if (sockets.find((s) => s.username == username))
       return { error: `This name "${username}" is taken` };
