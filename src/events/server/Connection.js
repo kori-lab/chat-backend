@@ -18,8 +18,7 @@ export async function execute(server, socket, request) {
   const user_ip = await IPLookup(
     request.headers["x-forwarded-for"] || request.socket.remoteAddress
   );
-  const locaiton_info = {
-    countryCode: user_ip.countryCode,
+  const location_info = {
     region: user_ip.region,
     country: {
       name: user_ip.country,
@@ -32,7 +31,7 @@ export async function execute(server, socket, request) {
     socket,
     username,
     user_agent,
-    locaiton_info
+    location_info
   );
 
   console.log("new connection", username, locaiton_info, user_agent);

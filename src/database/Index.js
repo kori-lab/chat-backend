@@ -18,14 +18,14 @@ export default class Database {
    * @param {string} username
    * @param {IResult} user_agent
    */
-  add_client(socket, username, user_agent, locaiton_info) {
+  add_client(socket, username, user_agent, location_info) {
     sockets = sockets.filter((s) => s.readyState == WebSocket.OPEN);
 
     const uuid = this.generate_uuid();
 
     socket.uuid = uuid;
     socket.user_agent = user_agent;
-    socket.locaiton_info = locaiton_info;
+    socket.location_info = location_info;
 
     if (sockets.find((s) => s.username == username))
       return { error: `This name "${username}" is taken` };

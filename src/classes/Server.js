@@ -19,7 +19,7 @@ export default class Server extends WebSocketServer {
             author: {
               agent: author.user_agent,
               name: author.username,
-              location: author.locaiton_info,
+              location: author.location_info,
             },
             timestamp: Date.now(),
           })
