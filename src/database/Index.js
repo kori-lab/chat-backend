@@ -33,7 +33,7 @@ export default class Database {
       return {
         error: `use \`/name\` to set your name`,
       };
-    else if (username.length < 38 && username.length > 2)
+    else if (username.length > 38 || username.length < 2)
       return {
         error: `your name must be more than **2** and less than **38** letters, use \`/name\` to set your name`,
       };
