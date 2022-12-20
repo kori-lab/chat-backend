@@ -7,9 +7,11 @@ const { IResult } = ua;
 var sockets = [];
 
 export default class Database {
-  constructor() {}
+  constructor(...args) {}
 
   sockets() {
+    sockets = sockets.filter((s) => s.readyState == WebSocket.OPEN);
+
     return sockets;
   }
 
@@ -19,7 +21,7 @@ export default class Database {
    * @param {IResult} user_agent
    */
   add_client(socket, username, user_agent, location_info) {
-    sockets = sockets.filter((s) => s.readyState == WebSocket.OPEN);
+    this.sockets();
 
     const uuid = this.generate_uuid();
 
@@ -27,15 +29,25 @@ export default class Database {
     socket.user_agent = user_agent;
     socket.location_info = location_info;
 
-    if (sockets.find((s) => s.username == username))
-      return { error: `This name "${username}" is taken` };
+    if (!username)
+      return {
+        error: `use \`/name\` to set your name`,
+      };
+    else if (username.length < 38 && username.length > 2)
+      return {
+        error: `your name must be more than **2** and less than **38** letters, use \`/name\` to set your name`,
+      };
+    else if (sockets.find((s) => s.username == username))
+      return {
+        error: `This name **${username}** is taken, use \`/name\` to change your name`,
+      };
 
     socket.username = username;
-
     sockets.push(socket);
 
     return {
       error: "",
+      uuid,
     };
   }
 

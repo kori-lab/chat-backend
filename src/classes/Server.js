@@ -9,21 +9,40 @@ export default class Server extends WebSocketServer {
     this.database = new Database();
   }
 
-  send_message(type, message, author) {
+  send_message(type = 1, message, author, blockeds = []) {
     this.database.sockets().forEach((client) => {
-      if (client.readyState == WebSocket.OPEN) {
-        client.send(
-          JSON.stringify({
-            type,
-            content: message,
-            author: {
-              agent: author.user_agent,
-              name: author.username,
-              location: author.location_info,
-            },
-            timestamp: Date.now(),
-          })
-        );
+      if (
+        client.readyState == WebSocket.OPEN &&
+        !blockeds.includes(client.uuid)
+      ) {
+        if (type == 1) {
+          client.send(
+            JSON.stringify({
+              type,
+              content: message,
+              author: {
+                agent: author.user_agent,
+                name: author.username,
+                location: author.location_info,
+              },
+              timestamp: Date.now(),
+            })
+          );
+        } else if (type == 3 || type == 4) {
+          client.send(
+            JSON.stringify({
+              type,
+              content: message,
+              author: {
+                agent: author.user_agent,
+                name: author.username,
+                location: author.location_info,
+              },
+              total_users: this.database.sockets().length,
+              timestamp: Date.now(),
+            })
+          );
+        }
       }
     });
   }
