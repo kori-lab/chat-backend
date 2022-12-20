@@ -16,5 +16,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "@types/ua-parser-js": "^0.7.36",
+    "@types/ws": "^8.5.3"
+  }
 }

@@ -19,7 +19,7 @@ export async function execute(server, socket, request) {
   const user_ip = await IPLookup(
     request.headers["x-forwarded-for"] || request.socket.remoteAddress
   );
-  /*
+  
   const location_info = {
     region: user_ip.region,
     country: {
@@ -28,19 +28,19 @@ export async function execute(server, socket, request) {
       flag: CountryFlag(user_ip.countryCode),
     },
   };
-  */
+  
   const user_agent = new UAParser(request.headers["user-agent"]).getResult();
   const user_created = server.database.add_client(
     socket,
     username,
-    user_agent
-    // location_info
+    user_agent,
+    location_info
   );
 
   console.log(
     "new connection",
     username,
-    //location_info,
+    location_info,
     user_agent
   );
 
